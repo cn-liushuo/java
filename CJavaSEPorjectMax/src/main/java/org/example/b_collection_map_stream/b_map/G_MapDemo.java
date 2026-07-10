@@ -1,6 +1,6 @@
 package org.example.b_collection_map_stream.b_map;
 
-import org.example.a_hashset.C_Teacher;
+import org.example.b_collection_map_stream.a_hashset.C_Teacher;
 
 import java.util.Map;
 import java.util.TreeMap;

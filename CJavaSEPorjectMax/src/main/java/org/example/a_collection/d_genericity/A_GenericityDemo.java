@@ -1,6 +1,6 @@
 package org.example.a_collection.d_genericity;
 
-import com.example.c_genericity.Student;
+import org.example.a_collection.c_genericity.Student;
 
 public class A_GenericityDemo {
     public static void main(String[] args) {
