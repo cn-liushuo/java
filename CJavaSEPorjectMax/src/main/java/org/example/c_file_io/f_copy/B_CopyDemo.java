@@ -2,9 +2,9 @@ package org.example.c_file_io.f_copy;
 
 import java.io.*;
 
-public class A_CopyDemo {
+public class B_CopyDemo {
     public static void main(String[] args) {
-        // 目标：使用字节流完成文件的复制操作。
+        // 目标：掌握关闭资源的新方式 try-with-resource
         // 源文件: D:\images\wechat\avatar.png
         // 目标文件: D:\images\wechat\avatar_copy.png (复制过去的时候必须带文件名的，无法自动生成文件名。)
         copyFile("D:\\images\\wechat\\avatar.png", "D:\\images\\wechat\\avatar_copy.png");
@@ -13,12 +13,14 @@ public class A_CopyDemo {
 
     // 复制文件
     public static void copyFile(String srcPath, String destPath) {
-        InputStream fis = null;
-        OutputStream fos = null;
-        try {
+        try (
+                // 这里只能放置资源对象，用完后，最终会自动调用其close方法关闭！！
+                FileInputStream fis = new FileInputStream(srcPath);
+                OutputStream fos = new FileOutputStream(destPath);
+                MyConn conn = new MyConn();
+        ) {
             // 1、创建一个文件字节输入流管道与源文件接通
-            fis = new FileInputStream(srcPath);
-            fos = new FileOutputStream(destPath);
+
             // 2、读取一个字节数组，写入一个字节数组
             byte[] buffer = new byte[1024];
             int len;
@@ -29,20 +31,13 @@ public class A_CopyDemo {
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            // 最后一定会执行一次，即便程序出现异常！
-            // 3、关闭流
-            try {
-                if (fos != null) fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (fis != null) fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
+    }
+}
+
+class MyConn implements Closeable {
+    @Override
+    public void close() throws IOException {
+        System.out.println("关闭了！");
     }
 }
