@@ -1,4 +1,4 @@
-package org.example.c_file_io.g_fileReader;
+package org.example.c_file_io.g_filereader;
 
 import java.io.FileReader;
 
