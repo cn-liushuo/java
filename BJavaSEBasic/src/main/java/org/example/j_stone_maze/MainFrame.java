@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 // 自定义窗口类，创建对象，展示一个主窗口。
 public class MainFrame extends JFrame {
@@ -27,8 +31,12 @@ public class MainFrame extends JFrame {
     private int row; // 行索引
     private int col; // 列索引
     private int count; // 统计总共移动到步数
+    // 定义一个变量记录历史最小步数
+    private int minCount;
 
     public MainFrame() {
+        minCount = readFileScore();
+
         // 1、调用一个初始化方法：初始化窗口大小等信息。
         initFrame();
         // 4、打乱数字色块的顺序，再展示图片
@@ -193,13 +201,27 @@ public class MainFrame extends JFrame {
 
         // 刷新界面时，可以给界面显示步数：
         // 给窗口添加一个展示文字的组件
-        JLabel countTxt = new JLabel("当前移动" + count + "步");
+        JLabel countTxt = new JLabel("当前移动：" + count + "步");
         countTxt.setBounds(30, 20, 140, 20);
         // 把文字展示成红色
         countTxt.setForeground(Color.RED);
         // 加粗
         countTxt.setFont(new Font("楷体", Font.BOLD, 16));
         this.add(countTxt);
+
+        // 问一问是不是第一玩游戏，展示还没有历史胜利步数。
+        JLabel countTxt2;
+        if (minCount != 0) {
+            countTxt2 = new JLabel("最少步数：" + minCount + "步");
+        } else {
+            countTxt2 = new JLabel("没有历史步数");
+        }
+        countTxt2.setBounds(300, 20, 140, 20);
+        // 把文字展示成白色
+        countTxt2.setForeground(Color.WHITE);
+        // 加粗
+        countTxt2.setFont(new Font("楷体", Font.BOLD, 16));
+        this.add(countTxt2);
 
 
         // 判断是否赢了。
@@ -208,6 +230,13 @@ public class MainFrame extends JFrame {
             JLabel label = new JLabel(new ImageIcon(imagePath + "win.png"));
             label.setBounds(124, 230, 266, 88);
             this.add(label);
+
+            // 读取文件中的最小步数，看是否要进行更新。
+            int fileMinCount = readFileScore();
+            // 判断这个步数是否是0，是0说明是第一次玩游戏，直接写入当前胜利的步数。
+            if (fileMinCount == 0 || count < fileMinCount) {
+                writeFileScore(count);
+            }
         }
 
         // 1、展示一个行列矩阵的图片色块依次铺满窗口(4 * 4)
@@ -233,6 +262,34 @@ public class MainFrame extends JFrame {
 
         // 刷新新图层，重新绘制。
         this.repaint();
+    }
+
+    // 把当前最少步数写入到文件中去更新
+    private void writeFileScore(int count) {
+        try (
+                FileWriter fw = new FileWriter("BJavaSEBasic/src/main/java/org/example/j_stone_maze/score.txt");
+                BufferedWriter bw = new BufferedWriter(fw);
+        ) {
+            // 把步数写入到文件中去
+            bw.write(String.valueOf(count));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 读取 score.txt 文件中的最小步数。
+    private int readFileScore() {
+        try (
+                FileReader fr = new FileReader("BJavaSEBasic/src/main/java/org/example/j_stone_maze/score.txt");
+                BufferedReader br = new BufferedReader(fr);
+        ) {
+            // 读取文件中的最小步数
+            String line = br.readLine();
+            return Integer.parseInt(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     private boolean isWin() {
