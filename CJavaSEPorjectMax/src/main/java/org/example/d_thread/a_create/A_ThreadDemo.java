@@ -1,6 +1,6 @@
 package org.example.d_thread.a_create;
 
-public class Test {
+public class A_ThreadDemo {
     // main 方法本身是由一条主线程负责推进执行的。
     public static void main(String[] args) {
         // 目标：认识多线程，掌握创建线程的方式一：继承 Thread 类来实现
