@@ -9,6 +9,7 @@ public class B_ThreadDemo {
         Runnable r = new MyRunnable();
         // 4、把线程任务对象交给一个线程对象来处理
         Thread t = new Thread(r); // public Thread(Runnable r)
+        // Thread t = new Thread(r, "1号子线程"); // public Thread(Runnable r, String name)
         // 5、启动线程
         t.start();
 
