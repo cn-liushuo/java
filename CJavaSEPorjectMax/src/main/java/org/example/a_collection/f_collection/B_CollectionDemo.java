@@ -37,6 +37,6 @@ public class B_CollectionDemo {
         System.out.println(Arrays.toString(arr));
 
         // 把集合转换成字符串数组(拓展)
-        String[] arr2 = list.toArray(String[]::new);
+        String[] arr2 = list.toArray(new String[0]);
     }
 }

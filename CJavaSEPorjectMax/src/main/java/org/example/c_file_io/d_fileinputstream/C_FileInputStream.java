@@ -10,8 +10,9 @@ public class C_FileInputStream {
         // InputStream is = new FileInputStream(new File("b-java-se-project-max/day03-file-io/src/main/resources/liushuo02.txt"));
         InputStream is = new FileInputStream("b-java-se-project-max/day03-file-io/src/main/resources/liushuo04.txt"); // 简化写法
 
-        // 2、一次性读完文件的全部字节: 可以避免读取汉字输出
-        byte[] bytes = is.readAllBytes();
+        // 2、一次性读完文件的全部字节: 可以避免读取汉字输出（JDK 8 兼容写法）
+        byte[] bytes = new byte[is.available()];
+        is.read(bytes);
 
         String rs = new String(bytes);
 

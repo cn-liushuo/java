@@ -9,10 +9,9 @@ public interface A {
         run();
     }
 
-    // 2、私有方法(jdk9 开始支持的)
-    // 私有的实例方法
+    // 2、默认方法(JDK 8 兼容)：原为 JDK 9 私有方法，改用默认方法
     // 如何调用？使用接口中的其他实例方法来调用它
-    private void run() {
+    default void run() {
         System.out.println("run 方法执行了");
     }
 
