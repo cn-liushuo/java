@@ -16,5 +16,19 @@ public class A_ExecutorServiceDemo {
                 new ThreadPoolExecutor.AbortPolicy()
         );
         // 2、使用线程池处理任务！看会不会复用线程？
+        Runnable target = new MyRunnable();
+        pool.execute(target); // 提交第1个任务 创建第1个线程 自动启动线程处理这个任务
+        pool.execute(target); // 提交第2个任务 创建线程 自动启动线程处理这个任务
+        pool.execute(target); // 提交第3个任务 创建线程 自动启动线程处理这个任务
+        pool.execute(target); // 复用线程
+        pool.execute(target); // 复用线程
+        pool.execute(target); // 复用线程
+        pool.execute(target); // 到了临时线程的创建时机了
+        pool.execute(target); // 到了临时线程的创建时机了
+        pool.execute(target); // 到了任务拒绝策列了，忙不过来
+
+        // 3、关闭线程池：一般不关闭线程池。
+        // pool.shutdown(); // 等所有任务执行完毕后再关闭线程池！
+        // pool.shutdownNow(); // 立即关闭，不管任务是否执行完毕！
     }
 }
