@@ -11,6 +11,11 @@ public class ThreadTest {
         // 现在公司举办了年会活动，活动中有一个红包雨环节，要求共计发出200个红包，其中小红包在[1-30] 元之间。
         // 总占比为 80%，大红包[31-100]元，总占比为20%。
         // 分析：100个员工实际上就是100个线程，来竞争200个红包。
+        List<Integer> redPacket = getRedPacket(200);
+        // 2、定义线程类，船舰100个线程，竞争同一个集合。
+        for (int i = 1; i <= 100; i++) {
+            new PeopleGetRedPacket(redPacket, "人" + i).start();
+        }
     }
 
     // 准备这200个随机的红包返回，放到 List 集合中去返回。
