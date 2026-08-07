@@ -25,5 +25,7 @@ public class A_UDPClientDemo {
 
         // 3、让发送端对象发送数据包的数据
         socket.send(packet);
+
+        socket.close();
     }
 }

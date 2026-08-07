@@ -26,5 +26,7 @@ public class B_UDPServerDemo {
         String ip = packet.getAddress().getHostAddress();
         int port = packet.getPort();
         System.out.println("对方ip：" + ip + "     对方端口：" + port);
+
+        socket.close();
     }
 }
