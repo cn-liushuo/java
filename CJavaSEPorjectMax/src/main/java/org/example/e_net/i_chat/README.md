@@ -206,4 +206,79 @@ public class ClientChatFrame extends JFrame {
 
 ### 3、定义一个 App 启动类：创建进入界面对象并展示
 
-### 4、从进入界面开始开发。
+### 4、分析系统的整体架构
+
+![chat.png](../../../../../resources/images/chat.png)
+
+1、开发服务端要做的事情大概有这些：
+
+- 接收客户端的管道链接。
+- 接收登录消息，接收昵称信息。
+- 服务端也可能是接收客户端发送过来的群聊消息。
+- 服务端存储全部在线的socket管道，以便到时候知道哪些客户端在线，以便为这些客户端转发消息。
+- 如果服务端收到了登录消息，接收昵称，然后更新所有客户端的在线人数列表。
+- 如果服务端收到了群聊消息，需要接收这个人的消息，再转发给所有客户端展示这个消息。
+
+2、客户端界面已经准备好了。
+
+### 5、先开发完整的服务端。
+
+- 第一步：创建一个服务端的项目：chat-server
+- 第二步：创建一个服务端启动类，启动服务器等待客户端的连接
+
+```java
+public class Server {
+  public static void main(String[] args) {
+    System.out.println("========= 启动服务端系统 =========");
+    try {
+      // 1、注册端口
+      ServerSocket serverSocket = new ServerSocket(Constant.PORT);
+      // 2、主线程负责接收客户端的连接请求
+      while (true) {
+        // 调用 accept 方法，获取客户端的 Socket 对象
+        System.out.println("========= 等待客户端的连接…… =========");
+        Socket socket = serverSocket.accept();
+        System.out.println("========= 一个客户端连接成功…… =========");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+- 第三步：把这个管道交给一个独立的线程来处理，以便支持很多客户端可以同时进来通信。
+
+```java
+public class Server {
+  public static void main(String[] args) {
+    System.out.println("========= 启动服务端系统 =========");
+    try {
+      // 1、注册端口
+      ServerSocket serverSocket = new ServerSocket(Constant.PORT);
+      // 2、主线程负责接收客户端的连接请求
+      while (true) {
+        // 调用 accept 方法，获取客户端的 Socket 对象
+        System.out.println("========= 等待客户端的连接…… =========");
+
+        Socket socket = serverSocket.accept();
+        new ServerReaderThread(socket).start();
+
+        System.out.println("========= 一个客户端连接成功…… =========");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+- 第四步：定义一个集合容器存储所有登录进来的客户端管道，以便将来群发消息给他们。
+  - 这个集合只需要一个记住所有的在线的客户端socket
+
+```java
+// 定义一个 Map 集合，键是客户端的管道，值是这个管道的用户名称。
+public static final Map<Socket, String> onLineSockets = new HashMap<>();
+```
+
+### 6、服务端接收登录消息/群聊消息
