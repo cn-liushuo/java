@@ -2,11 +2,15 @@ package org.example.e_net.i_chat.com.example.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 public class ChatEntryFrame extends JFrame {
     private JTextField nicknameField;
     private JButton enterButton;
     private JButton cancelButton;
+    private Socket socket; // 记住当前客户端系统的通信管道
 
     public ChatEntryFrame() {
         setTitle("局域网聊天室");
@@ -45,7 +49,7 @@ public class ChatEntryFrame extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(Color.decode("#F0F0F0"));
 
-        enterButton = new JButton("进入");
+        enterButton = new JButton("登录");
         enterButton.setFont(new Font("楷体", Font.BOLD, 16));
         enterButton.setBackground(Color.decode("#007BFF"));
         enterButton.setForeground(Color.WHITE);
@@ -65,10 +69,17 @@ public class ChatEntryFrame extends JFrame {
 
         // 添加监听器
         enterButton.addActionListener(e -> {
-            String nickname = nicknameField.getText();
+            String nickname = nicknameField.getText(); // 获取昵称
+            nicknameField.setText("");
             if (!nickname.isEmpty()) {
-                // 进入聊天空逻辑
-                dispose(); // 关闭窗口
+                try {
+                    login(nickname);
+                    // 进入聊天室逻辑：启动聊天界面，把昵称传给聊天界面。
+                    new ClientChatFrame(nickname, socket);
+                    this.dispose(); // 关闭登录窗口
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "请输入昵称！");
             }
@@ -77,6 +88,17 @@ public class ChatEntryFrame extends JFrame {
         cancelButton.addActionListener(e -> System.exit(0));
 
         setVisible(true);
+    }
+
+    public void login(String nickname) throws Exception {
+        // 立即发送登录消息给服务端程序。
+        // 1、创建 socket 管道请求与服务端的 socket 连接
+        socket = new Socket(Constant.SERVER_IP, Constant.SERVER_PORT);
+        // 2、立即发送消息类型1 和自己的昵称给服务端
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        dos.writeInt(1); // 消息类型 登录
+        dos.writeUTF(nickname);
+        dos.flush();
     }
 
     public static void main(String[] args) {

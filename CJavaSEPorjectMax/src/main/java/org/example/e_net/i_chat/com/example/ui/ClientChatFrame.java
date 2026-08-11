@@ -2,18 +2,32 @@ package org.example.e_net.i_chat.com.example.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.List;
 
 public class ClientChatFrame extends JFrame {
     public JTextArea smsContent = new JTextArea(23, 50);
     private JTextArea smsSend = new JTextArea(4, 40);
     public JList<String> onLineUsers = new JList<>();
     private JButton sendBn = new JButton("发送");
+    private Socket socket;
 
     public ClientChatFrame() {
         initView();
         this.setVisible(true);
+    }
+
+    public ClientChatFrame(String nickname, Socket socket) {
+        this(); // 先调用上面无参构造器，初始化界面信息
+        // 初始化数据。
+        // 立马展示昵称到窗口
+        this.setTitle(nickname + "的聊天窗口");
+        this.socket = socket;
+
+        // 立即把客户端这个 Socket 管道交给一个独立的线程专门负责读取客户端 socket 从服务端收到的在线人数更新数据或者群聊数据。
+        new ClientReaderThread(socket, this).start();
     }
 
     private void initView() {
@@ -62,6 +76,16 @@ public class ClientChatFrame extends JFrame {
         btns.setBackground(new Color(0xf0, 0xf0, 0xf0));
         btns.add(sendBn);
 
+        // 给发送按钮绑定点击事件
+        sendBn.addActionListener(e -> {
+            // 获取输入框中的内容
+            String msg = smsSend.getText();
+            // 清空输入框
+            smsSend.setText("");
+            // 发送消息：
+            sendMsgToServer(msg);
+        });
+
         // 添加组件
         bottomPanel.add(smsSendScrollPane, BorderLayout.CENTER);
         bottomPanel.add(btns, BorderLayout.EAST);
@@ -81,7 +105,32 @@ public class ClientChatFrame extends JFrame {
         this.add(userListScrollPane, BorderLayout.EAST);
     }
 
+    // 发送消息
+    private void sendMsgToServer(String msg) {
+        // 1、从 Socket 管道中得到一个特殊数据输出流
+        try {
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            // 2、把消息发送给服务端
+            dos.writeInt(2);
+            dos.writeUTF(msg);
+            dos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         new ClientChatFrame();
+    }
+
+    public void updateOnLineUsers(String[] onLineName) {
+        // 把这个线程读取到的在线用户名称展示到界面上
+        onLineUsers.setListData(onLineName);
+    }
+
+    // 更新群聊消息
+    public void setMsgToWin(String msg) {
+        // 更新群聊消息到页面展示
+        smsContent.append(msg);
     }
 }

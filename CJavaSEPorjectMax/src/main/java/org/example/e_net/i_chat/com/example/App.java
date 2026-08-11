@@ -4,6 +4,6 @@ import org.example.e_net.i_chat.com.example.ui.ChatEntryFrame;
 
 public class App {
     public static void main(String[] args) {
-        new ChatEntryFrame();
+        new ChatEntryFrame(); // 启动登录界面
     }
 }

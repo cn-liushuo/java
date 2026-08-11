@@ -228,22 +228,22 @@ public class ClientChatFrame extends JFrame {
 
 ```java
 public class Server {
-  public static void main(String[] args) {
-    System.out.println("========= 启动服务端系统 =========");
-    try {
-      // 1、注册端口
-      ServerSocket serverSocket = new ServerSocket(Constant.PORT);
-      // 2、主线程负责接收客户端的连接请求
-      while (true) {
-        // 调用 accept 方法，获取客户端的 Socket 对象
-        System.out.println("========= 等待客户端的连接…… =========");
-        Socket socket = serverSocket.accept();
-        System.out.println("========= 一个客户端连接成功…… =========");
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+    public static void main(String[] args) {
+        System.out.println("========= 启动服务端系统 =========");
+        try {
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(Constant.PORT);
+            // 2、主线程负责接收客户端的连接请求
+            while (true) {
+                // 调用 accept 方法，获取客户端的 Socket 对象
+                System.out.println("========= 等待客户端的连接…… =========");
+                Socket socket = serverSocket.accept();
+                System.out.println("========= 一个客户端连接成功…… =========");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-  }
 }
 ```
 
@@ -251,30 +251,30 @@ public class Server {
 
 ```java
 public class Server {
-  public static void main(String[] args) {
-    System.out.println("========= 启动服务端系统 =========");
-    try {
-      // 1、注册端口
-      ServerSocket serverSocket = new ServerSocket(Constant.PORT);
-      // 2、主线程负责接收客户端的连接请求
-      while (true) {
-        // 调用 accept 方法，获取客户端的 Socket 对象
-        System.out.println("========= 等待客户端的连接…… =========");
+    public static void main(String[] args) {
+        System.out.println("========= 启动服务端系统 =========");
+        try {
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(Constant.PORT);
+            // 2、主线程负责接收客户端的连接请求
+            while (true) {
+                // 调用 accept 方法，获取客户端的 Socket 对象
+                System.out.println("========= 等待客户端的连接…… =========");
 
-        Socket socket = serverSocket.accept();
-        new ServerReaderThread(socket).start();
+                Socket socket = serverSocket.accept();
+                new ServerReaderThread(socket).start();
 
-        System.out.println("========= 一个客户端连接成功…… =========");
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+                System.out.println("========= 一个客户端连接成功…… =========");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-  }
 }
 ```
 
 - 第四步：定义一个集合容器存储所有登录进来的客户端管道，以便将来群发消息给他们。
-  - 这个集合只需要一个记住所有的在线的客户端socket
+    - 这个集合只需要一个记住所有的在线的客户端socket
 
 ```java
 // 定义一个 Map 集合，键是客户端的管道，值是这个管道的用户名称。
@@ -521,3 +521,24 @@ public class ServerReaderThread extends Thread {
 ```
 
 ### 6、完善整个客户端程序的代码
+
+**第一步：从登录界面开始：完成了登录，完成了 socket 传个消息聊天界面。**
+
+给进入按钮绑定一个点击事件监听器 ，让他可以点击，一旦点击了，获取到昵称后，然后立即请求与服务器端的 socket 管道连接。
+
+并立即发送登录信息：发送1，发送昵称。
+
+再展示客户端的聊天界面：接收到了昵称，接收到了属于自己客户端的 socket 通信管道。
+
+**第二步：立即在消息聊天界面，立即读取客户端 socket 管道从服务端发来的在线人数更新消息/群聊消息**
+
+- 交给一个独立的线程专门负责读取客户端 socket 从服务端收到的在线人数更新数据和群聊数据。
+- 收到消息，先判断消息的类型，判断是在线人数更新消息还是群聊消息，分开处理。
+
+**第三步：接收群聊消息**
+
+- 接收消息类型是2，接收群聊数据，展示到界面的面板上去即可。
+
+**第四步：发送群聊消息**
+
+- 给发送按钮绑定一个点击事件，获取输入框的消息内容，再先发送2，再把群聊内容发送给服务端。
