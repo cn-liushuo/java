@@ -1,7 +1,7 @@
 # Java
 
 #### 介绍
-Java SE、SpringBoot、Vue、ruoyi、微服务、MySQL、JVM、数据结构与算法、SSM、Spring高级、springcloud、Docker、Git、Maven、Dubbo、Zookeeper、Redis、MongoDB、RabbitMQ、RocketMQ
+Java SE···SpringBoot、Vue、ruoyi、微服务、MySQL、JVM、数据结构与算法、SSM、Spring高级、springcloud、Docker、Git、Maven、Dubbo、Zookeeper、Redis、MongoDB、RabbitMQ、RocketMQ
 
 Java 学习与实战练习仓库，围绕 Java SE 分模块整理，包含算法题解、基础语法、进阶实战与综合项目：
 
