@@ -82,9 +82,18 @@ public class B_ReflectDemo {
             System.out.println(method.getName() + "(" + method.getParameterCount() + ")");
         }
         // 3、获取单个成员方法对象。
-        Method eat = c1.getDeclaredMethod("eat"); // 获取无参数的 eat 方法
-        Method eat2 = c1.getDeclaredMethod("eat", String.class);  // 获取有参数的 eat 方法
-        System.out.println(eat.getName() + "(" + eat.getParameterCount() + ")");
-        System.out.println(eat2.getName() + "(" + eat2.getParameterCount() + ")");
+        Method m1 = c1.getDeclaredMethod("eat"); // 获取无参数的 eat 方法
+        Method m2 = c1.getDeclaredMethod("eat", String.class);  // 获取有参数的 eat 方法
+        System.out.println(m1.getName() + "(" + m1.getParameterCount() + ")");
+        System.out.println(m2.getName() + "(" + m2.getParameterCount() + ")");
+
+        // 4、获取成员方法的目的依然是调用方法。
+        Dog d = new Dog("团团", 3);
+        m1.setAccessible(true); // 绕过访问权限，直接访问！
+        Object rs1 = m1.invoke(d);// 唤醒对象的d的eat方法执行，相当于 d.eat();
+        System.out.println(rs1); // null
+
+        Object rs2 = m2.invoke(d, "牛肉"); // 唤醒对象d的eat带String参数的方法执行，相当于 d.eat("牛肉");
+        System.out.println(rs2); // "狗说，汪汪汪！"
     }
 }
