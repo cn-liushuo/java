@@ -1,0 +1,16 @@
+=========Dog=========
+name=米奇
+age=3
+hobby=null
+=========Student=========
+name=张三
+age=18
+hobby=123456789
+=========Teacher=========
+name=李老师
+age=19
+hobby=java、前端
+salary=8000.0
+className=高三(1)班
+sex=女
+phone=13800138000
