@@ -21,3 +21,15 @@ out/
 target/
 build/
 bin/
+
+# Eclipse 工程文件（已弃用）
+.classpath
+.project
+.settings/
+
+# VS Code：忽略个人配置，保留团队共享
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
