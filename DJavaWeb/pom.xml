@@ -7,6 +7,14 @@
     <groupId>org.example</groupId>
     <artifactId>DJavaWeb</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>maven-project01</module>
+        <module>maven-project02</module>
+        <module>maven-projectA</module>
+        <module>maven-projectB</module>
+        <module>maven-projectC</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
