@@ -16,6 +16,7 @@
         <module>maven-projectC</module>
         <module>springboot-web-quickstart</module>
         <module>http-server-demo</module>
+        <module>springboot-web-quickstart2</module>
     </modules>
 
     <properties>
