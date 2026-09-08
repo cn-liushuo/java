@@ -9,7 +9,7 @@ Java 学习与实战练习仓库。关键词：Java SE、算法、前端 Web、V
 | 1 | **BJavaSEBasic** | Maven | Java SE 语法、面向对象、Swing 小项目 |
 | 2 | **CJavaSEPorjectMax** | Maven | 集合 / IO / 多线程 / 网络 / 反射与代理 |
 | 3 | **ALeetCode** | Maven | LeetCode 算法题解 |
-| 4 | **DJavaWeb** | Maven 聚合 + 前端静态页 + Vue CLI | HTML / CSS / JS / Ajax / Vue；Maven 入门；HTTP 原理与 Spring Boot Web 入门 |
+| 4 | **DJavaWeb** | Maven 聚合 + 前端静态页 + Vue CLI | HTML / CSS / JS / Ajax / Vue；Maven 入门；HTTP 原理与 Spring Boot Web（快速入门 + 请求响应参数） |
 
 > 建议按上表顺序学习：先 SE，再进阶与网络，再刷题巩固，最后补前端与 Web 后端入门，为后续 Spring / MyBatis / 微服务做准备。
 
@@ -22,7 +22,7 @@ Java 学习与实战练习仓库。关键词：Java SE、算法、前端 Web、V
 | ALeetCode | 两数之和；二进制字符串连续 `1` 字段判断等 |
 | BJavaSEBasic | 变量、运算符、流程控制、数组、OOP（封装 / 继承 / 多态 / 接口 / 内部类 / Lambda）、GUI；员工管理系统、石头迷宫 |
 | CJavaSEPorjectMax | 异常、泛型、集合、Map、Stream、文件 IO（commons-io）、多线程、UDP/TCP、局域网即时通讯；JUnit、反射、注解、动态代理 |
-| DJavaWeb | 前端：HTML/CSS、JS（BOM/DOM/事件）、Vue 指令与生命周期、Ajax（原生 / Axios）、`vue-project`（Vue 2 + Element UI + Vue Router）；后端入门：Maven 多模块练习、手写 HTTP Server、Spring Boot Web 快速入门 |
+| DJavaWeb | 前端：HTML/CSS、JS（BOM/DOM/事件）、Vue 指令与生命周期、Ajax（原生 / Axios）、`vue-project`（Vue 2 + Element UI + Vue Router）；后端入门：Maven 多模块、手写 HTTP Server、Spring Boot Web 快速入门与请求参数绑定 |
 
 ---
 
@@ -42,7 +42,9 @@ java/
 │   ├── maven-project02/            # Maven 练习
 │   ├── maven-projectA/B/C/         # Maven 多模块依赖演示
 │   ├── http-server-demo/           # 基于 ServerSocket 的简易 HTTP 服务
-│   ├── springboot-web-quickstart/  # Spring Boot Web 快速入门
+│   ├── springboot-web-quickstart/  # Spring Boot Web 快速入门（Hello / 表单页）
+│   ├── springboot-web-quickstart2/ # Spring Boot Web 脚手架练习
+│   ├── springboot-web-req-resp/    # Spring Boot 请求参数接收与响应
 │   └── pom.xml                     # DJavaWeb 聚合父工程
 └── README.md
 ```
@@ -62,6 +64,7 @@ java/
 - CJavaSEPorjectMax：commons-io `2.11.0`、JUnit `4.13.2`
 - vue-project：Vue `2.6`、Vue Router `3`、Element UI `2`、Axios
 - springboot-web-quickstart：Spring Boot `2.6.13`（`spring-boot-starter-web`）
+- springboot-web-req-resp：Spring Boot `2.7.6`（`spring-boot-starter-web`）
 
 ---
 
@@ -102,6 +105,26 @@ mvn spring-boot:run
 - `http://localhost:8080/hello` → 返回 `Hello World`
 - `http://localhost:8080/01.GET-POST.html` → GET / POST 表单演示页
 
+**Spring Boot 请求响应（参数绑定）**
+
+```bash
+cd DJavaWeb/springboot-web-req-resp
+mvn spring-boot:run
+```
+
+`RequestController` 统一前缀 `/param`，示例：
+
+| 路径 | 说明 |
+|------|------|
+| `/param/simpleParam` | 简单参数（`@RequestParam`） |
+| `/param/simplePojo` | 简单实体封装 |
+| `/param/complexPojo` | 复杂实体（含嵌套 Address） |
+| `/param/arrayParam` | 数组参数 |
+| `/param/listParam` | 集合参数 |
+| `/param/dateParam` | 日期时间（`yyyy-MM-dd HH:mm:ss`） |
+| `/param/jsonParam` | JSON 请求体（`@RequestBody`） |
+| `/param/path/{id}`、`/param/path/{id}/{name}` | 路径变量（`@PathVariable`） |
+
 **手写 HTTP Server**
 
 运行 `DJavaWeb/http-server-demo` 中 `com.itheima.Server` 的 `main`（默认端口 `8080`），浏览器访问对应静态资源路径即可。注意：与 Spring Boot 同时启动时勿占用同一端口。
@@ -139,6 +162,8 @@ mvn spring-boot:run
 | `maven-project01` ~ `maven-projectC` | Maven 依赖、测试、多模块练习 |
 | `http-server-demo/` | 运行 `com.itheima.Server`，体验 HTTP 请求/响应 |
 | `springboot-web-quickstart/` | 运行启动类；`HelloController` 提供 `/hello` |
+| `springboot-web-quickstart2/` | Spring Boot 脚手架练习工程 |
+| `springboot-web-req-resp/` | `RequestController`：各类请求参数绑定演示 |
 
 ---
 
@@ -177,6 +202,8 @@ mvn spring-boot:run
 | `maven-project*` | Maven 工程结构、依赖管理、多模块 |
 | `http-server-demo` | Socket 级 HTTP 服务原理 |
 | `springboot-web-quickstart` | Spring Boot Web、Controller、静态资源 |
+| `springboot-web-quickstart2` | Spring Boot 脚手架练习 |
+| `springboot-web-req-resp` | 简单/实体/数组/集合/日期/JSON/路径参数绑定 |
 
 ---
 
