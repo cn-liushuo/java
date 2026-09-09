@@ -1,0 +1,77 @@
+# 表操作
+
+-- DDL: 表结构
+-- 创建：基本语法
+create table tb_user
+(
+    id       int comment 'ID，唯一标识',
+    username varchar(20) comment '用户名',
+    name     varchar(10) comment '姓名',
+    age      int comment '年龄',
+    gender   char(1) comment '性别'
+) comment '用户表';
+
+-- 创建：基本语法(约束)
+create table tb_user
+(
+    id       int primary key /* primary key 主键约束 */ auto_increment /* auto_increment 自动递增 */ comment 'ID，唯一标识',
+    username varchar(20) not null /* not null 非空约束 */ unique /* unique 唯一约束 */ comment '用户名',
+    name     varchar(10) not null comment '姓名',
+    age      int comment '年龄',
+    gender   char(1) default '男' /* default '男' 默认 */ comment '性别'
+) comment '用户表';
+
+
+-- DDL: 查看表结构
+-- 查看：当前数据库下的表
+show tables;
+
+-- 查看：查看指定表结构
+desc tb_emp;
+
+-- 查看：数据库的建表语句
+show create table tb_emp;
+
+
+-- DDL: 修改表结构
+-- 修改：为表 tb_emp 添加字段 qq varchar(11)
+alter table tb_emp
+    add qq varchar(11) comment 'QQ';
+
+-- 修改：修改 tb_emp 字段类型 qq varchar(13)
+alter table tb_emp
+    modify qq varchar(13) comment 'QQ';
+
+-- 修改：修改 tb_emp 字段名 qq 为 qq_num varchar(13)
+alter table tb_emp
+    change qq qq_num varchar(13) comment 'QQ';
+
+-- 修改：删除 tb_emp 的 qq_num 字段
+alter table tb_emp
+    drop qq_num;
+
+-- 修改：将 tb_emp 表名改为 emp
+rename table tb_emp to emp;
+
+
+-- DDL：删除表结构
+-- 删除：删除 tb_emp 表
+drop table if exists tb_emp;
+
+create table tb_emp
+(
+    id          int auto_increment comment '主键ID'
+        primary key,
+    username    varchar(20)                  not null comment '用户名',
+    password    varchar(32) default '123456' null comment '密码',
+    name        varchar(10)                  not null comment '姓名',
+    gender      tinyint unsigned             not null comment '性别：1、男；2、女',
+    image       varchar(300)                 null comment '图像url',
+    job         tinyint unsigned             null comment '职位：1、班主任；2、讲师；3、学工主管；4、教研主管；',
+    entry_date  date                         null comment '入职日期',
+    create_time datetime                     not null comment '创建时间',
+    update_time datetime                     not null comment '修改时间',
+    constraint tb_emp_pk_2
+        unique (username)
+)
+    comment '员工表';
