@@ -1,4 +1,4 @@
-# 表操作
+-- 表操作（DDL）与数据插入（DML）
 
 -- DDL: 表结构
 -- 创建：基本语法
@@ -75,3 +75,22 @@ create table tb_emp
         unique (username)
 )
     comment '员工表';
+
+
+-- DML：数据操作语言
+-- DML：插入数据 - insert
+-- 1、为 tb_emp 表的 username, name, gender 字段输入值
+insert into tb_emp(username, name, gender, create_time, update_time)
+values ('wuji', '张无忌', 1, now(), now());
+
+-- 2、为 tb_emp 表的所有字段插入值
+-- insert into tb_emp(id, username, password, name, gender, image, job, entry_date, create_time, update_time)
+-- values (null, 'zhiruo', '123', '周芷若', 2, '1.jpg', '1', '2010-01-01', now(), now());
+
+insert into tb_emp
+values (null, 'zhiruo2', '123', '周芷若', 2, '1.jpg', '1', '2010-01-01', now(), now());
+
+-- 3、批量：为 tb_emp 表的 username, name, gender 字段插入多行
+insert into tb_emp(username, name, gender, create_time, update_time)
+values ('weifuwang', '韦一笑', 1, now(), now()),
+       ('xieshiwang', '谢逊', 1, now(), now());
