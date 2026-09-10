@@ -9,7 +9,7 @@ Java 学习与实战练习仓库。关键词：Java SE、算法、前端 Web、V
 | 1 | **BJavaSEBasic** | Maven | Java SE 语法、面向对象、Swing 小项目 |
 | 2 | **CJavaSEPorjectMax** | Maven | 集合 / IO / 多线程 / 网络 / 反射与代理 |
 | 3 | **ALeetCode** | Maven | LeetCode 算法题解 |
-| 4 | **DJavaWeb** | Maven 聚合 + 前端静态页 + Vue CLI | HTML / CSS / JS / Ajax / Vue；Maven 入门；HTTP 原理与 Spring Boot Web（快速入门 + 请求/响应 + 员工三层架构）；MySQL DDL / DML 基础练习 |
+| 4 | **DJavaWeb** | Maven 聚合 + 前端静态页 + Vue CLI | HTML / CSS / JS / Ajax / Vue；Maven 入门；HTTP 原理与 Spring Boot Web（快速入门 + 请求/响应 + 员工三层架构）；MySQL DDL / DML / DQL 基础练习 |
 
 > 建议按上表顺序学习：先 SE，再进阶与网络，再刷题巩固，最后补前端与 Web 后端入门，为后续 Spring / MyBatis / 微服务做准备。
 
@@ -22,7 +22,7 @@ Java 学习与实战练习仓库。关键词：Java SE、算法、前端 Web、V
 | ALeetCode | 两数之和；二进制字符串连续 `1` 字段判断等 |
 | BJavaSEBasic | 变量、运算符、流程控制、数组、OOP（封装 / 继承 / 多态 / 接口 / 内部类 / Lambda）、GUI；员工管理系统、石头迷宫 |
 | CJavaSEPorjectMax | 异常、泛型、集合、Map、Stream、文件 IO（commons-io）、多线程、UDP/TCP、局域网即时通讯；JUnit、反射、注解、动态代理 |
-| DJavaWeb | 前端：HTML/CSS、JS（BOM/DOM/事件）、Vue 指令与生命周期、Ajax（原生 / Axios）、`vue-project`（Vue 2 + Element UI + Vue Router）；后端入门：Maven 多模块、手写 HTTP Server、Spring Boot Web 快速入门、请求参数绑定、`Result` 统一响应、员工列表三层架构（Controller → Service → Dao + XML）；MySQL 数据库/表 DDL 与 `INSERT` 练习（`static/SQL`） |
+| DJavaWeb | 前端：HTML/CSS、JS（BOM/DOM/事件）、Vue 指令与生命周期、Ajax（原生 / Axios）、`vue-project`（Vue 2 + Element UI + Vue Router）；后端入门：Maven 多模块、手写 HTTP Server、Spring Boot Web 快速入门、请求参数绑定、`Result` 统一响应、员工列表三层架构（Controller → Service → Dao + XML）；MySQL 库/表 DDL、DML（增删改）与 DQL（查询练习 + 参考答案）（`static/SQL`） |
 
 ---
 
@@ -45,7 +45,7 @@ java/
 │   ├── springboot-web-quickstart/  # Spring Boot Web 快速入门（Hello / 表单页）
 │   ├── springboot-web-quickstart2/ # Spring Boot Web 脚手架练习
 │   ├── springboot-web-req-resp/    # 请求参数 / 统一响应 / 员工三层架构
-│   │   └── src/main/resources/static/SQL/  # MySQL DDL/DML 练习（库/表/插入 + 数据类型表）
+│   │   └── src/main/resources/static/SQL/  # MySQL DDL/DML/DQL 练习（库/表/增删改 + 查询题与答案）
 │   └── pom.xml                     # DJavaWeb 聚合父工程
 └── README.md
 ```
@@ -140,18 +140,19 @@ mvn spring-boot:run
 - `GET /listEmp` → `EmpController` → Service → Dao，解析 `emp.xml`，返回 `Result`
 - 页面：`http://localhost:8080/emp.html`
 
-**MySQL DDL / DML 练习（与 Spring Boot 运行无关）**
+**MySQL DDL / DML / DQL 练习（与 Spring Boot 运行无关）**
 
 路径：`DJavaWeb/springboot-web-req-resp/src/main/resources/static/SQL/`
 
 | 文件 | 说明 |
 |------|------|
-| `mysql_01.sql` | 数据库：查询 / 使用 / 创建 / 删除 |
-| `mysql_02.sql` | 表 DDL + DML `INSERT`（指定字段 / 全字段 / 批量）；`tb_emp` 示例 |
+| `mysql_01.sql` | 库操作 + 表 DDL + DML（`INSERT` / `UPDATE` / `DELETE`） |
+| `mysql_02.sql` | DQL 参考答案：`tb_emp` 数据准备 + 基础 / 条件 / 分组查询 |
+| `1.`～`6. DQL-*.sql` | DQL 练习题（数据准备、基础、条件、分组、排序、分页） |
 | `MySQL数据类型.xlsx` | 常用数据类型对照 |
 | `README.md` | 练习说明与注意事项 |
 
-在 MySQL 客户端中按序号分段执行即可；详见该目录 README。
+建议先练 `mysql_01`，再按 `1.`～`6.` 做 DQL 填空，对照 `mysql_02` 核对；详见该目录 README。
 
 **手写 HTTP Server**
 
@@ -191,7 +192,7 @@ mvn spring-boot:run
 | `http-server-demo/` | 运行 `com.itheima.Server`，体验 HTTP 请求/响应 |
 | `springboot-web-quickstart/` | 运行启动类；`HelloController` 提供 `/hello` |
 | `springboot-web-quickstart2/` | Spring Boot 脚手架练习工程 |
-| `springboot-web-req-resp/` | `RequestController`（参数绑定）、`ResponseController`（统一响应）、`EmpController`（`/listEmp` + `emp.html`）；`static/SQL` 为 MySQL DDL / DML 练习 |
+| `springboot-web-req-resp/` | `RequestController`（参数绑定）、`ResponseController`（统一响应）、`EmpController`（`/listEmp` + `emp.html`）；`static/SQL` 为 MySQL DDL / DML / DQL 练习 |
 
 ---
 
@@ -231,7 +232,7 @@ mvn spring-boot:run
 | `http-server-demo` | Socket 级 HTTP 服务原理 |
 | `springboot-web-quickstart` | Spring Boot Web、Controller、静态资源 |
 | `springboot-web-quickstart2` | Spring Boot 脚手架练习 |
-| `springboot-web-req-resp` | 请求参数绑定；`Result` 统一响应；员工列表三层架构（Controller → Service → Dao + XML）；`static/SQL` MySQL DDL / DML 入门 |
+| `springboot-web-req-resp` | 请求参数绑定；`Result` 统一响应；员工列表三层架构（Controller → Service → Dao + XML）；`static/SQL` MySQL DDL / DML / DQL 入门 |
 
 ---
 
