@@ -316,3 +316,86 @@ from tb_emp
 group by gender;
 
 -- 3. 先查询入职时间在 '2015-01-01' (包含) 以前的员工 , 并对结果根据职位分组 , 获取员工数量大于等于2的职位
+select job, count(*)
+from tb_emp
+where entrydate <= '2015-01-01'
+group by job
+having count(*) >= 2;
+
+
+--  =================== 排序查询 ======================
+-- 1. 根据入职时间, 对员工进行升序排序 - asc
+select *
+from tb_emp
+order by entrydate asc;
+
+select *
+from tb_emp
+order by entrydate;
+
+-- 2. 根据入职时间, 对员工进行降序排序 - desc
+select *
+from tb_emp
+order by entrydate desc;
+
+-- 3. 根据 入职时间 对公司的员工进行 升序排序 ， 入职时间相同 , 再按照 更新时间 进行降序排序
+select *
+from tb_emp
+order by entrydate, update_time desc;
+
+
+--  =================== 分页查询 ======================
+-- 1. 从起始索引0开始查询员工数据, 每页展示5条记录
+select *
+from tb_emp
+limit 0, 5;
+
+-- 2. 查询 第1页 员工数据, 每页展示5条记录
+select *
+from tb_emp
+limit 5;
+
+-- 3. 查询 第2页 员工数据, 每页展示5条记录
+select *
+from tb_emp
+limit 5, 5;
+
+-- 4. 查询 第3页 员工数据, 每页展示5条记录
+select *
+from tb_emp
+limit 10, 5;
+
+-- 起始索引 = (页码 - 1) * 每页展示记录数
+
+
+-- 案例1：按需求完成员工管理的条件分页查询 - 根据输入条件，查询第一页数据，每页展示10条记录。
+-- 输入条件：
+-- 姓名：张
+-- 性别：男
+-- 入职时间：2000-01-01 2015-12-31
+select *
+from tb_emp
+where name like '张%'
+  and gender = 1
+  and entrydate between '2000-01-01' and '2015-12-31'
+order by update_time desc
+limit 0, 10;
+
+
+-- 案例2-1：根据需求，完成员工性别信息的统计 - count(*)
+-- if(条件表达式，true取值，false取值)
+select if(gender = 1, '男性员工', '女性员工') 性别, count(*)
+from tb_emp
+group by gender;
+
+-- 案例2-2：根据需求，完成员工职位信息的统计
+-- case 表达式 when 值1 then 结果1 when 值2 then 结果2 ... else ... end
+select (case job
+            when 1 then '班主任'
+            when 2 then '讲师'
+            when 3 then '学工主管'
+            when 4 then '教研主管'
+            else '未分配职位' end) 职位,
+       count(*)
+from tb_emp
+group by job;
