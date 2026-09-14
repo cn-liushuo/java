@@ -78,5 +78,51 @@ VALUES (1, 'jinyong', '123456', '金庸', 1, '1.jpg', 4, '2000-01-01', 2, now(),
        (16, 'songyuanqiao', '123456', '宋远桥', 1, '16.jpg', 2, '2010-01-01', 2, now(), now()),
        (17, 'chenyouliang', '123456', '陈友谅', 1, '17.jpg', NULL, '2015-03-21', NULL, now(), now());
 
+create table category
+(
+    id          int unsigned auto_increment comment '主键ID'
+        primary key,
+    name        varchar(20)                not null unique comment '分类名称',
+    type        tinyint                    not null comment '类型：1、菜品分类；2、套餐分类；',
+    sort        tinyint unsigned           not null comment '排序字段',
+    status      tinyint unsigned default 0 not null comment '状态：0、停用；1、启用',
+    create_time datetime                   not null comment '创建时间',
+    update_time datetime                   not null comment '修改时间'
+)
+    comment '分类表';
+
+create table dish
+(
+    id          int unsigned primary key auto_increment comment '主键ID',
+    name        varchar(20)      not null unique comment '菜品名称',
+    category_id int unsigned     not null comment '套餐分类ID',
+    price       decimal(8, 2)    not null comment '价格',
+    image       varchar(300)     not null comment '图片',
+    description varchar(200) comment '描述信息',
+    status      tinyint unsigned not null default 0 comment '状态：0、停售；1、起售',
+    create_time datetime         not null comment '创建时间',
+    update_time datetime         not null comment '修改时间'
+) comment '菜品表';
+
+create table set_meal
+(
+    id          int unsigned primary key auto_increment comment '主键ID',
+    name        varchar(20)      not null unique comment '套餐名称',
+    category_id int unsigned     not null comment '套餐分类ID',
+    price       decimal(8, 2)    not null comment '价格',
+    image       varchar(300)     not null comment '图片',
+    description varchar(200) comment '描述信息',
+    status      tinyint unsigned not null default 0 comment '状态：0、停售；1、起售',
+    create_time datetime         not null comment '创建时间',
+    update_time datetime         not null comment '修改时间'
+) comment '套餐表';
+
+create table set_meal_dish
+(
+    id          int unsigned primary key auto_increment comment '主键ID',
+    set_meal_id int unsigned     not null comment '套餐ID',
+    dish_id     int unsigned     not null comment '菜品ID',
+    copies      tinyint unsigned not null comment '菜品的份数'
+) comment '套餐菜品关系表';
 
 
