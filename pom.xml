@@ -5,6 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>java</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>ALeetCode</module>
+        <module>BJavaSEBasic</module>
+        <module>CJavaSEPorjectMax</module>
+        <module>DJavaWeb</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
