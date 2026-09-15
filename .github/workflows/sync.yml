@@ -18,7 +18,7 @@ jobs:
         run: |
           # 1. 配置 Git 用户信息
           git config --global user.email "liushuo.fe@gmail.com"
-          git config --global user.name "liushuo_fe"
+          git config --global user.name "ls"
 
           # 2. 配置并启动本地虚拟主机的 SSH 密钥
           mkdir -p ~/.ssh
