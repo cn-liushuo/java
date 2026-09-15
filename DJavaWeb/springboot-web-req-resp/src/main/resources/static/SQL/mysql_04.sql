@@ -531,7 +531,7 @@ where id = 2;
 -- 删除部门下的员工
 delete
 from tb_emp
-where dept_id == 2;
+where dept_id = 2;
 
 -- 提交事务
 commit;
