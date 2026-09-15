@@ -4,33 +4,60 @@ on:
   push:
     branches:
       - main
+  # 长历史分批未跑完时可手动再触发，会从远端已有 tip 续传
+  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    # 大仓分批推送可能较久，放宽单 job 上限
+    timeout-minutes: 360
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Mirror to Gitee & GitCode
+      - name: Setup SSH for mirror push
+        id: setup_ssh
         run: |
-          # 1. 配置 Git 用户信息
           git config --global user.email "liushuo.fe@gmail.com"
           git config --global user.name "ls"
 
-          # 2. 配置并启动本地虚拟主机的 SSH 密钥
           mkdir -p ~/.ssh
-          echo "${{ secrets.SYNC_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 700 ~/.ssh
+
+          # Secret 写入私钥时保证末尾换行，避免 OpenSSH 拒识密钥
+          printf '%s\n' "${{ secrets.SYNC_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          # 3. 信任 Gitee 与 GitCode 的服务器指纹
+          # 长连接保活，降低分批推送过程中 Broken pipe 概率
+          cat > ~/.ssh/config <<'EOF'
+          Host gitee.com gitcode.com
+            IdentityFile ~/.ssh/id_ed25519
+            IdentitiesOnly yes
+            ServerAliveInterval 30
+            ServerAliveCountMax 120
+            TCPKeepAlive yes
+          EOF
+          sed -i 's/^[[:space:]]*//' ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
           ssh-keyscan -H gitee.com >> ~/.ssh/known_hosts
           ssh-keyscan -H gitcode.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-          # 4. 强行推送到 Gitee
-          git push --prune git@gitee.com:liushuo_fe/java.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
+          chmod +x .github/scripts/mirror-push.sh
 
-          # 5. 强行推送到 GitCode
-          git push --prune git@gitcode.com:liushuo_fe/java.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
+      - name: Mirror to Gitee
+        id: mirror_gitee
+        env:
+          BATCH_SIZE: "5"
+        run: .github/scripts/mirror-push.sh "git@gitee.com:liushuo_fe/java.git"
+
+      - name: Mirror to GitCode
+        # SSH 就绪后即使 Gitee 失败也继续推 GitCode
+        if: steps.setup_ssh.outcome == 'success'
+        env:
+          BATCH_SIZE: "5"
+        run: .github/scripts/mirror-push.sh "git@gitcode.com:liushuo_fe/java.git"
